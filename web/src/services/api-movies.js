@@ -10,6 +10,8 @@ const getMoviesFromApi = () => {
 });
 };
 
+//hacer otro fetch para /movie/id y se debe ejecutar al hacer click
+
 const objToExport = {
   getMoviesFromApi: getMoviesFromApi
 };
