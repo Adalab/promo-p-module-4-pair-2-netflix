@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const Database = require('better-sqlite3');
 
 // create and config server
 const server = express();
@@ -41,6 +42,8 @@ https://localhost:4000...
 /gambita.jpg
 
 */
+
+const db = Database('./src/db/database.db', { verbose: console.log });
 
 server.get('/movies/', (req, res) => {
   const response = {
