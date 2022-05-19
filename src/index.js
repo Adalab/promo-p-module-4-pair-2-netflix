@@ -15,21 +15,6 @@ server.listen(serverPort, () => {
   console.log(`Server listening at http://localhost:${serverPort}`);
 });
 
-const movies = [
-  {
-    id: '1',
-    title: 'Gambita de dama',
-    gender: 'Drama',
-    image: '//localhost:4000/gambita.jpg',
-  },
-  {
-    id: '2',
-    title: 'Friends',
-    gender: 'Comedia',
-    image: '//localhost:4000/friends.jpg',
-  },
-];
-
 /*
 
 https://localhost:4000...
@@ -45,17 +30,24 @@ https://localhost:4000...
 
 const db = Database('./src/db/database.db', { verbose: console.log });
 
+// Endpoint para servir dinámicamente la landing de las movies
+
 server.get('/movies/', (req, res) => {
+  const query = db.prepare(`SELECT * FROM movies`);
+  const moviesList = query.all();
+
   const response = {
     success: true,
-    movies: movies,
+    movies: moviesList,
   };
+  // qué me devuelve
   res.json(response);
 });
 
 // Para conseguir el id de la película que se va a renderizar con movieId
 server.get('/movie/:movieId', (req, res) => {
   // dentro del server.get hay que crear una constante para encontrar el id de las películas con req.params.movieId
+
   // El valor de la parte variable de la ruta (donde hemos puesto :movieId)
   // viene en la variable req.params.movieId ( :movieId -> movieId )
   console.log(req.params.movieId);
