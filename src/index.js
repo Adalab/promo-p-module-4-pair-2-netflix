@@ -47,20 +47,22 @@ server.get('/movies/', (req, res) => {
 // Para conseguir el id de la película que se va a renderizar con movieId
 server.get('/movie/:movieId', (req, res) => {
   // dentro del server.get hay que crear una constante para encontrar el id de las películas con req.params.movieId
-
-  // El valor de la parte variable de la ruta (donde hemos puesto :movieId)
-  // viene en la variable req.params.movieId ( :movieId -> movieId )
   console.log(req.params.movieId);
 
-  const foundMovie = movies.find((movie) => movie.id === req.params.movieId);
+  const query = db.prepare('SELECT * FROM movies WHERE id=?');
+
+  // const foundMovie = movies.find((movie) => movie.id === req.params.movieId);
+  // El valor de la parte variable de la ruta (donde hemos puesto :movieId)
+  // viene en la variable req.params.movieId ( :movieId -> movieId )
   //   foundMovie es una variable con un objeto con los datos a renderizar
   // (o con los que hidratar la plantilla)
   // id
   // title
   // gender
   // image
+  const foundMovie = query.get(req.params.movieId);
 
-  console.log(foundMovie);
+  console.log('movie', foundMovie);
 
   res.render('movie', foundMovie);
 });
