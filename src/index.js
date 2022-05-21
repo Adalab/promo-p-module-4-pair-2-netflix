@@ -33,15 +33,26 @@ const db = Database('./src/db/database.db', { verbose: console.log });
 // Endpoint para servir dinámicamente la landing de las movies
 
 server.get('/movies/', (req, res) => {
-  const query = db.prepare(`SELECT * FROM movies`);
-  const moviesList = query.all();
+  const genderFilter = req.query.gender;
+  console.log(genderFilter);
 
-  const response = {
-    success: true,
-    movies: moviesList,
-  };
-  // qué me devuelve
-  res.json(response);
+  if (genderFilter !== '') {
+    const query = db.prepare(`SELECT * FROM movies WHERE gender =?`);
+    const foundmovieByGender = query.all(genderFilter);
+
+    res.json({ success: true, movies: foundmovieByGender });
+  } else {
+    const query = db.prepare(`SELECT * FROM movies`);
+
+    const moviesList = query.all();
+
+    const response = {
+      success: true,
+      movies: moviesList,
+    };
+    // qué me devuelve si entra en else
+    res.json(response);
+  }
 });
 
 // Para conseguir el id de la película que se va a renderizar con movieId
