@@ -34,15 +34,19 @@ const db = Database('./src/db/database.db', { verbose: console.log });
 
 server.get('/movies/', (req, res) => {
   const genderFilter = req.query.gender;
+  const sortMovie = req.query.sort;
   console.log(genderFilter);
 
-  if (genderFilter !== '') {
-    const query = db.prepare(`SELECT * FROM movies WHERE gender =?`);
+  if (genderFilter !== '' || !sortMovie) {
+    const query = db.prepare(
+      `SELECT * FROM movies WHERE gender =? ORDER BY name ${sortMovie}`
+    );
+
     const foundmovieByGender = query.all(genderFilter);
 
     res.json({ success: true, movies: foundmovieByGender });
   } else {
-    const query = db.prepare(`SELECT * FROM movies`);
+    const query = db.prepare(`SELECT * FROM movies ORDER BY name ${sortMovie}`);
 
     const moviesList = query.all();
 
